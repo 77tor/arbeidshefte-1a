@@ -97,6 +97,242 @@
     </div>
   </div>
 
+<!-- MODAL 1: SKRIV UT ARBEIDSARK -->
+<div id="print-options-modal" class="modal-backdrop no-print hidden">
+  <div class="pmodal-box pmodal-medium">
+    <div class="pmodal-header pmodal-header-indigo">
+      <div class="pmodal-header-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <h2>Skriv ut arbeidsark</h2>
+      </div>
+      <button type="button" class="pmodal-close" data-close-pmodal="print-options-modal">✕</button>
+    </div>
+
+    <div class="pmodal-body">
+      <div class="pmodal-section-label">HVA VIL DU SKRIVE UT?</div>
+      <div class="pmodal-radio-grid">
+        <label class="pmodal-radio-card active" id="print-scope-selected-card">
+          <input type="radio" name="printScope" value="selected" checked />
+          <div>
+            <strong>Ark valgt i venstremenyen</strong>
+            <span>Følger synlige og valgte ark</span>
+          </div>
+        </label>
+
+        <label class="pmodal-radio-card" id="print-scope-current-card">
+          <input type="radio" name="printScope" value="current" />
+          <div>
+            <strong>Gjeldende arbeidsark</strong>
+            <span id="print-current-label">Arket som er valgt nå</span>
+          </div>
+        </label>
+      </div>
+
+      <hr class="pmodal-divider" />
+
+      <label class="pmodal-checkbox-row" id="print-toc-row">
+        <input type="checkbox" id="print-include-ark0" checked />
+        <span>Inkluder Forside og Innholdsfortegnelse (Ark 0)</span>
+      </label>
+
+      <div class="pmodal-estimate-box">
+        <span>Beregnet utskrift:</span>
+        <strong id="print-estimate-text">0 ark (0 sider)</strong>
+      </div>
+    </div>
+
+    <div class="pmodal-footer">
+      <button type="button" class="pmodal-btn pmodal-btn-ghost" data-close-pmodal="print-options-modal">Avbryt</button>
+      <button type="button" class="pmodal-btn pmodal-btn-indigo" id="btn-do-normal-print">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Vanlig utskrift
+      </button>
+      <button type="button" class="pmodal-btn pmodal-btn-green" id="btn-open-pdf-guide">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Lag PDF for hefte
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 2: VEILEDNING FOR LAGRING AV PDF -->
+<div id="pdf-guide-modal" class="modal-backdrop no-print hidden">
+  <div class="pmodal-box pmodal-large">
+    <div class="pmodal-header pmodal-header-green">
+      <div class="pmodal-header-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <div>
+          <h2>Lag PDF for hefteutskrift</h2>
+          <p class="pmodal-subtitle">Veiledning for lagring av PDF og hefteutskrift</p>
+        </div>
+      </div>
+      <button type="button" class="pmodal-close" data-close-pmodal="pdf-guide-modal">✕</button>
+    </div>
+
+    <div class="pmodal-body">
+      <h3 class="pmodal-step-title">1. Lagre som PDF:</h3>
+      <ol class="pmodal-ol">
+        <li>Velg <a href="#" class="pmodal-zoom-link" data-zoom-img="utskrift/03.png" data-zoom-title="Velg «Lagre som PDF» under Destinasjon">«Lagre som PDF» 🔍</a> under Destinasjon.</li>
+        <li>Behold <strong>A4</strong> som papirstørrelse og <strong>100 % skalering</strong>.</li>
+        <li>Klikk <strong>«Lagre»</strong>.</li>
+      </ol>
+
+      <div class="pmodal-step2-header">
+        <h3 class="pmodal-step-title">2. Skriv ut PDF-filen som hefte:</h3>
+        <div class="pmodal-tabs" data-tab-group="guide">
+          <button type="button" class="pmodal-tab active" data-tab-target="guide-browser">I nettleseren</button>
+          <button type="button" class="pmodal-tab" data-tab-target="guide-adobe">I Adobe Reader</button>
+        </div>
+      </div>
+
+      <!-- Fane: I nettleseren -->
+      <div class="pmodal-tab-pane active" id="guide-browser">
+        <ol class="pmodal-ol">
+          <li>Velg <strong>Sikkerprint</strong>, åpne <strong>Flere innstillinger</strong>, fjern krysset for <strong>Tosidig</strong> og klikk <strong>Skriv ut med systemdialogen (Ctrl+Shift+P)</strong>.</li>
+          <li>Fjern krysset for <strong>La appen endre utskriftsinnstillingene</strong> og klikk <strong>Flere innstillinger</strong>.</li>
+          <li>Velg <strong>A3</strong> som papirstørrelse, <strong>Venstre til høyre</strong> under Hefteutskrift og <strong>2 i midten</strong> under Hefting.</li>
+        </ol>
+        <div class="pmodal-thumbs-grid cols-3">
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/01_01.png" data-zoom-title="1. Systemdialog">
+            <span>1. Systemdialog 🔍</span>
+            <img src="utskrift/01_01.png" alt="1. Systemdialog" />
+          </div>
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/01_02.png" data-zoom-title="2. Flere innstillinger">
+            <span>2. Flere innstillinger 🔍</span>
+            <img src="utskrift/01_02.png" alt="2. Flere innstillinger" />
+          </div>
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/01_03.png" data-zoom-title="3. A3 og Hefting">
+            <span>3. A3 og Hefting 🔍</span>
+            <img src="utskrift/01_03.png" alt="3. A3 og Hefting" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Fane: I Adobe Reader -->
+      <div class="pmodal-tab-pane" id="guide-adobe">
+        <ol class="pmodal-ol">
+          <li>Åpne PDF-filen i <strong>Adobe Reader</strong> og trykk <strong>Skriv ut (Ctrl + P)</strong>.</li>
+          <li>Velg <strong>Hefte</strong> under Sidestørrelse og håndtering, og sett papirstørrelse til <strong>A3</strong> (samt <strong>2 i midten</strong> under Hefting i skriveregenskapene).</li>
+        </ol>
+        <div class="pmodal-thumbs-grid cols-2">
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/01.png" data-zoom-title="1. Velg Hefte/Layout">
+            <span>1. Velg Hefte/Layout 🔍</span>
+            <img src="utskrift/01.png" alt="1. Velg Hefte/Layout" />
+          </div>
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/02.png" data-zoom-title="2. Velg Papirstørrelse (A3)">
+            <span>2. Velg Papirstørrelse (A3) 🔍</span>
+            <img src="utskrift/02.png" alt="2. Velg Papirstørrelse (A3)" />
+          </div>
+        </div>
+      </div>
+
+      <div class="pmodal-zoom-hint">Klikk på et bilde for å forstørre det.</div>
+    </div>
+
+    <div class="pmodal-footer space-between">
+      <button type="button" class="pmodal-btn pmodal-btn-plain" data-close-pmodal="pdf-guide-modal">Avbryt</button>
+      <button type="button" class="pmodal-btn pmodal-btn-green" id="btn-continue-save-pdf">
+        Fortsett og lagre PDF →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 3: PDF-EN ER KLAR (STEG 2) -->
+<div id="pdf-ready-modal" class="modal-backdrop no-print hidden">
+  <div class="pmodal-box pmodal-large">
+    <div class="pmodal-header pmodal-header-blue">
+      <div class="pmodal-header-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>
+        <div>
+          <h2>PDF-en er klar – slik skriver du ut hefte</h2>
+          <p class="pmodal-subtitle">Steg 2: Åpne PDF-filen og velg hefteutskrift</p>
+        </div>
+      </div>
+      <button type="button" class="pmodal-close" data-close-pmodal="pdf-ready-modal">✕</button>
+    </div>
+
+    <div class="pmodal-body">
+      <div class="pmodal-open-pdf-banner">
+        <h3>1. Åpne den lagrede PDF-filen:</h3>
+        <p>Klikk på knappen under for å åpne PDF-en i nettleseren, eller åpne filen direkte i <strong>Adobe Reader</strong> fra datamaskinen:</p>
+        <input type="file" id="pdf-file-picker" accept="application/pdf" class="hidden" />
+        <button type="button" class="pmodal-btn pmodal-btn-blue" id="btn-open-saved-pdf">
+          📁 Velg og åpne PDF-filen i nettleser
+        </button>
+      </div>
+
+      <div class="pmodal-step2-header">
+        <h3 class="pmodal-step-title">2. Trykk Skriv ut (Ctrl + P) og følg veiledningen:</h3>
+        <div class="pmodal-tabs" data-tab-group="ready">
+          <button type="button" class="pmodal-tab active" data-tab-target="ready-browser">Åpnet i nettleser</button>
+          <button type="button" class="pmodal-tab" data-tab-target="ready-adobe">Åpnet i Adobe Reader</button>
+        </div>
+      </div>
+
+      <!-- Fane: Åpnet i nettleser -->
+      <div class="pmodal-tab-pane active" id="ready-browser">
+        <ol class="pmodal-ol">
+          <li>Velg <strong>Sikkerprint</strong>, åpne <strong>Flere innstillinger</strong>, fjern krysset for <strong>Tosidig</strong> og klikk <strong>Skriv ut med systemdialogen (Ctrl+Shift+P)</strong>.</li>
+          <li>Fjern krysset for <strong>La appen endre utskriftsinnstillingene</strong> og klikk <strong>Flere innstillinger</strong>.</li>
+          <li>Velg <strong>A3</strong> som papirstørrelse, <strong>Venstre til høyre</strong> under Hefteutskrift og <strong>2 i midten</strong> under Hefting.</li>
+        </ol>
+        <div class="pmodal-thumbs-grid cols-3">
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/01_01.png" data-zoom-title="1. Systemdialog">
+            <span>1. Systemdialog 🔍</span>
+            <img src="utskrift/01_01.png" alt="1. Systemdialog" />
+          </div>
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/01_02.png" data-zoom-title="2. Flere innstillinger">
+            <span>2. Flere innstillinger 🔍</span>
+            <img src="utskrift/01_02.png" alt="2. Flere innstillinger" />
+          </div>
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/01_03.png" data-zoom-title="3. A3 og Hefting">
+            <span>3. A3 og Hefting 🔍</span>
+            <img src="utskrift/01_03.png" alt="3. A3 og Hefting" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Fane: Åpnet i Adobe Reader -->
+      <div class="pmodal-tab-pane" id="ready-adobe">
+        <ol class="pmodal-ol">
+          <li>Åpne PDF-filen i <strong>Adobe Reader</strong> og trykk <strong>Skriv ut (Ctrl + P)</strong>.</li>
+          <li>Velg <strong>Hefte</strong> under Sidestørrelse og håndtering, og sett papirstørrelse til <strong>A3</strong> (samt <strong>2 i midten</strong> under Hefting i skriveregenskapene).</li>
+        </ol>
+        <div class="pmodal-thumbs-grid cols-2">
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/01.png" data-zoom-title="1. Velg Hefte/Layout">
+            <span>1. Velg Hefte/Layout 🔍</span>
+            <img src="utskrift/01.png" alt="1. Velg Hefte/Layout" />
+          </div>
+          <div class="pmodal-thumb-card" data-zoom-img="utskrift/02.png" data-zoom-title="2. Velg Papirstørrelse (A3)">
+            <span>2. Velg Papirstørrelse (A3) 🔍</span>
+            <img src="utskrift/02.png" alt="2. Velg Papirstørrelse (A3)" />
+          </div>
+        </div>
+      </div>
+
+      <div class="pmodal-zoom-hint">Klikk på et bilde for å forstørre det.</div>
+    </div>
+
+    <div class="pmodal-footer">
+      <button type="button" class="pmodal-btn pmodal-btn-dark" data-close-pmodal="pdf-ready-modal">Ferdig / Lukk</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 4: FORSTØRRELSESVISNING AV VEILEDNINGSBILDE -->
+<div id="guide-zoom-modal" class="modal-backdrop no-print hidden">
+  <div class="pmodal-box pmodal-zoom-box">
+    <div class="pmodal-header pmodal-header-dark">
+      <h2 id="guide-zoom-title">Veiledningsbilde</h2>
+      <button type="button" class="pmodal-close" data-close-pmodal="guide-zoom-modal">✕</button>
+    </div>
+    <div class="pmodal-zoom-body">
+      <img id="guide-zoom-img" src="" alt="Forstørret veiledning" />
+    </div>
+  </div>
+</div>
+
   <!-- Oppgavebank-register -->
   <script>
     window.NORSK_DATA = {};

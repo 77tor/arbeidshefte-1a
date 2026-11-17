@@ -182,9 +182,7 @@ document.getElementById("btn-reset-weeks").addEventListener("click", () => {
     renderSheets();
   });
 
-  document.getElementById("btn-print").addEventListener("click", () => {
-    window.print();
-  });
+setupPrintModals();
 
   // RENDER KORTENE I VENSTREMENYEN (1–14)
   function renderSidebarCards() {
@@ -914,6 +912,7 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
     return html;
   }
 
+
 // BYGG ENKELT A4-SIDE
   function createA4PageElement({ id, title, weekLabel, subjectTag, bodyHTML, guest, pageIndex, totalPages }) {
     const article = document.createElement("article");
@@ -939,7 +938,12 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
     if (subjectTag === "Skriving" && rawDetail) {
       formattedTitle = `${baseTitle} - Bokstavene: ${rawDetail.toLowerCase()}`;
     } else if (subjectTag === "Regning" || subjectTag === "Matematikk") {
-      formattedTitle = sheetNum ? `${baseTitle} - Tallet: ${sheetNum}` : baseTitle;
+      const matteObj = sheetNum && window.MATTE_DATA ? window.MATTE_DATA[sheetNum] : null;
+      const numVal = matteObj && matteObj.tall !== undefined ? matteObj.tall : sheetNum;
+      const numWord = (matteObj && (matteObj.tallOrd || matteObj.ord)) || NUMBER_WORDS[numVal] || "";
+      formattedTitle = numVal
+        ? `${baseTitle} - Tallet: ${numVal}${numWord ? ` - ${numWord}` : ""}`
+        : baseTitle;
     }
 
     const hideHeaderFooter = id === "sheet-page-cover-back" || id === "sheet-page-cover";
@@ -972,8 +976,17 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
     return article;
   }
 
+    const NUMBER_WORDS = {
+      1: "en", 2: "to", 3: "tre", 4: "fire", 5: "fem",
+      6: "seks", 7: "sju", 8: "åtte", 9: "ni", 10: "ti",
+      11: "elleve", 12: "tolv", 13: "tretten", 14: "fjorten", 15: "femten",
+      16: "seksten", 17: "sytten", 18: "atten", 19: "nitten", 20: "tjue"
+    };
+
+
 // RENDER ALLE SYNLIGE A4-SIDER (NORSK OG MATTE HVER FOR SEG)
   function renderSheets() {
+
     const guest = !isLoggedIn();
     const sheetsContainerEl = document.getElementById("sheets-container");
     sheetsContainerEl.innerHTML = "";
@@ -1028,13 +1041,22 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
         currentPageNum++;
       }
 
-      const endPage = currentPageNum - 1;
+const endPage = currentPageNum - 1;
       const pageRange = startPage === endPage ? `${startPage}` : `${startPage}–${endPage}`;
+
+      const lettersStr = hasNorsk ? getLetters(norsk).join(", ") : "";
+      const numVal = matte && matte.tall !== undefined ? matte.tall : i;
+      const numWord = (matte && (matte.tallOrd || matte.ord)) || NUMBER_WORDS[numVal] || "";
+      const numberStr = hasMatte ? `${numVal}${numWord ? ` - ${numWord}` : ""}` : "";
+
+      const topicParts = [];
+      if (lettersStr) topicParts.push(`Bokstaver: <strong>${lettersStr}</strong>`);
+      if (numberStr) topicParts.push(`Tallet: <strong>${numberStr}</strong>`);
 
       tocEntries.push({
         sheetNum: i,
         weekLabel: cfg.weekLabel || (norsk && norsk.uke) || "",
-        letters: getLetters(norsk).join(", "),
+        topicHTML: topicParts.join(" &amp; "),
         subjects: subjects.join(" & "),
         pageRange
       });
@@ -1066,7 +1088,8 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
       });
     }
 
-    // 2. INNHOLDSFORTEGNELSE (SIDE 2)
+
+// 2. INNHOLDSFORTEGNELSE (SIDE 2)
     if (showToc) {
       const tocRowsHTML = tocEntries.length > 0
         ? tocEntries.map((entry) => `
@@ -1074,7 +1097,7 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
               <div class="toc-left">
                 <span class="toc-sheet">Arbeidsark ${entry.sheetNum}</span>
                 ${entry.weekLabel ? `<span class="toc-week">(${entry.weekLabel})</span>` : ""}
-                ${entry.letters ? `<span class="toc-letters">Bokstaver: <strong>${entry.letters}</strong></span>` : ""}
+                ${entry.topicHTML ? `<span class="toc-letters">${entry.topicHTML}</span>` : ""}
               </div>
               <div class="toc-dots"></div>
               <div class="toc-right">
@@ -1134,6 +1157,194 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
     });
   }
 
+
+function setupPrintModals() {
+    const printBtn = document.getElementById("btn-print") || document.querySelector(".btn-print-main");
+    const optionsModal = document.getElementById("print-options-modal");
+    const guideModal = document.getElementById("pdf-guide-modal");
+    const readyModal = document.getElementById("pdf-ready-modal");
+    const zoomModal = document.getElementById("guide-zoom-modal");
+
+    if (!printBtn || !optionsModal) return;
+
+    const scopeRadios = optionsModal.querySelectorAll('input[name="printScope"]');
+    const includeArk0Cb = document.getElementById("print-include-ark0");
+    const estimateEl = document.getElementById("print-estimate-text");
+    const currentLabelEl = document.getElementById("print-current-label");
+
+    let awaitingPdfSave = false;
+
+    function getActiveSheetNum() {
+      const activeCard = document.querySelector(".sheet-card.active");
+      if (activeCard && activeCard.dataset && activeCard.dataset.sheet) {
+        const num = parseInt(activeCard.dataset.sheet, 10);
+        if (num >= 1) return num;
+      }
+      return 1;
+    }
+
+    function updatePrintEstimate() {
+      const scope = optionsModal.querySelector('input[name="printScope"]:checked').value;
+      const activeNum = getActiveSheetNum();
+      currentLabelEl.textContent = `Arbeidsark ${activeNum}`;
+
+      document.getElementById("print-scope-selected-card").classList.toggle("active", scope === "selected");
+      document.getElementById("print-scope-current-card").classList.toggle("active", scope === "current");
+
+      let totalPages = 0;
+
+      if (scope === "selected") {
+        if (includeArk0Cb.checked) {
+          const cfg0 = sheetSettings[0] || { visible: true, showToc: true };
+          totalPages += cfg0.showToc ? 3 : 1;
+        }
+        for (let i = 1; i <= TOTAL_SHEETS; i++) {
+          const cfg = sheetSettings[i];
+          if (!cfg || !cfg.visible) continue;
+          if (cfg.norsk && cfg.norsk.show && window.NORSK_DATA[i]) totalPages++;
+          if (cfg.matte && cfg.matte.show && window.MATTE_DATA[i]) totalPages++;
+        }
+      } else {
+        if (includeArk0Cb.checked) {
+          const cfg0 = sheetSettings[0] || { visible: true, showToc: true };
+          totalPages += cfg0.showToc ? 3 : 1;
+        }
+        const cfg = sheetSettings[activeNum];
+        if (cfg) {
+          if (cfg.norsk && cfg.norsk.show && window.NORSK_DATA[activeNum]) totalPages++;
+          if (cfg.matte && cfg.matte.show && window.MATTE_DATA[activeNum]) totalPages++;
+        }
+      }
+
+      const physicalSheets = Math.ceil(totalPages / 2);
+      estimateEl.textContent = `${physicalSheets} ark (${totalPages} sider)`;
+    }
+
+    function applyPrintFilterAndPrint() {
+      const scope = optionsModal.querySelector('input[name="printScope"]:checked').value;
+      const includeArk0 = includeArk0Cb.checked;
+      const activeNum = getActiveSheetNum();
+
+      const prevArk0Visible = sheetSettings[0] ? sheetSettings[0].visible : true;
+      let rerendered = false;
+
+      if (sheetSettings[0] && sheetSettings[0].visible !== includeArk0) {
+        sheetSettings[0].visible = includeArk0;
+        renderSheets();
+        rerendered = true;
+      }
+
+      const allSheets = document.querySelectorAll(".a4-sheet");
+      allSheets.forEach((el) => {
+        el.classList.remove("print-skip");
+        if (scope === "current") {
+          const isArk0 = el.id === "sheet-page-cover" || el.id === "sheet-page-toc" || el.id === "sheet-page-cover-back";
+          const isTargetSheet = el.id.startsWith(`sheet-page-${activeNum}-`);
+          if (!isTargetSheet && !(includeArk0 && isArk0)) {
+            el.classList.add("print-skip");
+          }
+        }
+      });
+
+      window.print();
+
+      // Tilbakestill visning etter utskrift
+      document.querySelectorAll(".a4-sheet.print-skip").forEach((el) => el.classList.remove("print-skip"));
+      if (rerendered && sheetSettings[0]) {
+        sheetSettings[0].visible = prevArk0Visible;
+        renderSheets();
+      }
+    }
+
+    // Åpne Modal 1 når brukeren klikker på "Skriv ut" i venstremenyen
+    printBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      includeArk0Cb.checked = sheetSettings[0] ? Boolean(sheetSettings[0].visible) : true;
+      updatePrintEstimate();
+      optionsModal.classList.remove("hidden");
+    });
+
+    scopeRadios.forEach((r) => r.addEventListener("change", updatePrintEstimate));
+    includeArk0Cb.addEventListener("change", updatePrintEstimate);
+
+    // Vanlig utskrift
+    document.getElementById("btn-do-normal-print").addEventListener("click", () => {
+      optionsModal.classList.add("hidden");
+      applyPrintFilterAndPrint();
+    });
+
+    // Videre til Modal 2 (Lag PDF for hefte)
+    document.getElementById("btn-open-pdf-guide").addEventListener("click", () => {
+      optionsModal.classList.add("hidden");
+      guideModal.classList.remove("hidden");
+    });
+
+    // Fortsett og lagre PDF -> åpner utskriftsdialog og hopper til Modal 3 etterpå
+    document.getElementById("btn-continue-save-pdf").addEventListener("click", () => {
+      guideModal.classList.add("hidden");
+      awaitingPdfSave = true;
+      applyPrintFilterAndPrint();
+    });
+
+    window.addEventListener("afterprint", () => {
+      if (awaitingPdfSave) {
+        awaitingPdfSave = false;
+        readyModal.classList.remove("hidden");
+      }
+    });
+
+    // Velg og åpne lagret PDF-fil i ny fane i nettleseren
+    const filePicker = document.getElementById("pdf-file-picker");
+    document.getElementById("btn-open-saved-pdf").addEventListener("click", () => {
+      filePicker.value = "";
+      filePicker.click();
+    });
+
+    filePicker.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const blobUrl = URL.createObjectURL(file);
+        window.open(blobUrl, "_blank");
+      }
+    });
+
+    // Fanebytter (I nettleseren / I Adobe Reader)
+    document.querySelectorAll(".pmodal-tabs").forEach((tabBar) => {
+      tabBar.addEventListener("click", (e) => {
+        const btn = e.target.closest(".pmodal-tab");
+        if (!btn) return;
+        const container = tabBar.closest(".pmodal-body");
+        tabBar.querySelectorAll(".pmodal-tab").forEach((t) => t.classList.remove("active"));
+        container.querySelectorAll(".pmodal-tab-pane").forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        const target = document.getElementById(btn.dataset.tabTarget);
+        if (target) target.classList.add("active");
+      });
+    });
+
+    // Forstørr veiledningsbilde ved klikk
+    document.querySelectorAll("[data-zoom-img]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        document.getElementById("guide-zoom-img").src = el.dataset.zoomImg;
+        document.getElementById("guide-zoom-title").textContent = el.dataset.zoomTitle || "Veiledningsbilde";
+        zoomModal.classList.remove("hidden");
+      });
+    });
+
+    // Lukkeknapper og klikk utenfor modalboks
+    document.querySelectorAll("[data-close-pmodal]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.getElementById(btn.dataset.closePmodal).classList.add("hidden");
+      });
+    });
+
+    [optionsModal, guideModal, readyModal, zoomModal].forEach((modal) => {
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.add("hidden");
+      });
+    });
+  }
 
   // INIT
   renderAuthButton();
