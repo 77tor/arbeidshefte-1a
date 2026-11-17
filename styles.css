@@ -1,0 +1,233 @@
+/* ==========================================================================
+   1. SKRIFT, FARGER & GRUNNLEGGENDE OPPSETT
+   ========================================================================== */
+@font-face { font-family: "Trykkskrift"; src: url("skrift/Tor-trykkskrift.otf") format("opentype"); font-weight: normal; font-style: normal; font-display: swap; }
+:root { --blue-main: #0277bd; --blue-hover: #01579b; --blue-tint: #e1f5fe; --blue-border: #38bdf8; --amber-bg: #fef3c7; --amber-border: #f59e0b; --amber-text: #92400e; --bg-canvas: #cbd5e1; --sidebar-bg: #f1f5f9; --card-bg: #ffffff; --border: #e2e8f0; --text-dark: #0f172a; --text-muted: #64748b; }
+* { box-sizing: border-box; }
+body, button, input { margin: 0; font-family: "Trykkskrift", "Segoe UI", system-ui, -apple-system, sans-serif; }
+body { background: var(--bg-canvas); color: var(--text-dark); }
+.app-layout { display: flex; min-height: 100vh; }
+
+/* ==========================================================================
+   2. VENSTREMENY (SIDEBAR & ARK-KORT)
+   ========================================================================== */
+.sidebar { width: 390px; min-width: 390px; background: var(--sidebar-bg); border-right: 1px solid #cbd5e1; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; z-index: 30; }
+.sidebar-top { padding: 16px 16px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--sidebar-bg); }
+.brand-group { display: flex; align-items: center; gap: 10px; }
+.brand-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--blue-main); color: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sidebar-top h1 { font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--text-dark); line-height: 1.2; }
+.sidebar-top .subtitle { margin: 2px 0 0; font-size: 0.78rem; color: var(--text-muted); }
+.btn-login-pill { display: inline-flex; align-items: center; gap: 5px; background: var(--amber-bg); border: 1px solid #fcd34d; color: var(--amber-text); font-size: 0.78rem; font-weight: 700; padding: 5px 11px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+.btn-login-pill.logged-in { background: #dcfce7; border-color: #86efac; color: #166534; }
+.sidebar-section-label { padding: 4px 16px 8px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; color: #475569; text-transform: uppercase; }
+.sheet-cards-list { flex: 1; overflow-y: auto; padding: 2px 14px 14px; display: flex; flex-direction: column; gap: 10px; }
+.sheet-card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 11px; padding: 11px 12px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s; }
+.sheet-card:hover { border-color: #93c5fd; }
+.sheet-card.active { border-color: var(--blue-main); box-shadow: 0 0 0 2px rgba(2, 119, 189, 0.14); }
+.sheet-card.is-hidden-sheet { opacity: 0.58; background: #f8fafc; }
+.card-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.card-title-left { display: flex; align-items: center; gap: 7px; font-size: 0.88rem; font-weight: 700; color: var(--text-dark); }
+.card-title-left svg { color: #64748b; flex-shrink: 0; }
+.card-meta-right { display: flex; align-items: center; gap: 8px; }
+.week-badge { font-size: 0.74rem; font-weight: 600; color: #475569; background: #f1f5f9; border: 1px solid #e2e8f0; padding: 2px 8px; border-radius: 6px; }
+.eye-btn { background: none; border: none; padding: 2px; cursor: pointer; color: #475569; display: flex; align-items: center; justify-content: center; border-radius: 5px; }
+.eye-btn:hover { background: #f1f5f9; color: var(--blue-main); }
+.card-controls-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+.pill-group { display: inline-flex; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #ffffff; }
+.pill-btn { border: none; background: transparent; padding: 4px 8px; font-size: 0.72rem; font-weight: 600; color: #475569; cursor: pointer; border-right: 1px solid #e2e8f0; transition: background 0.12s, color 0.12s; }
+.pill-btn:last-child { border-right: none; }
+.pill-btn:hover { background: #f8fafc; }
+.pill-btn.active { background: var(--blue-main); color: #ffffff; }
+.card-subtasks-row { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0; display: flex; flex-wrap: wrap; gap: 5px; }
+.mini-chip { font-size: 0.7rem; font-weight: 600; padding: 3px 7px; border-radius: 5px; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; }
+.mini-chip.on { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
+.sidebar-bottom { padding: 12px 14px 14px; background: var(--sidebar-bg); border-top: 1px solid #cbd5e1; display: flex; flex-direction: column; gap: 10px; }
+.bottom-tools-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.btn-outline-tool { display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 11px; font-size: 0.8rem; font-weight: 600; color: var(--text-dark); cursor: pointer; }
+.btn-outline-tool:hover { background: #f8fafc; border-color: #94a3b8; }
+.page-num-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; }
+.page-num-toggle input { width: 15px; height: 15px; accent-color: var(--blue-main); }
+.btn-print-main { width: 100%; background: var(--blue-main); color: #ffffff; border: none; border-radius: 9px; padding: 11px 16px; font-size: 0.92rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 2px 6px rgba(2, 119, 189, 0.25); }
+.btn-print-main:hover { background: var(--blue-hover); }
+
+/* ==========================================================================
+   3. A4-ARK, TOPPTEKST & BUNNTEKST
+   ========================================================================== */
+.preview-area { flex: 1; padding: 34px 24px; background: var(--bg-canvas); display: flex; flex-direction: column; align-items: center; gap: 36px; overflow-y: auto; }
+.a4-sheet { width: 210mm; height: 297mm; min-height: 297mm; max-height: 297mm; background: #ffffff; padding: 10mm 14mm 7mm; border: 1px solid #94a3b8; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; scroll-margin-top: 24px; }
+.sheet-inner-top { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+.watermark-stamp { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-32deg); font-size: 2.35rem; font-weight: 800; color: rgba(100, 116, 139, 0.18); border: 5px solid rgba(100, 116, 139, 0.18); padding: 12px 28px; border-radius: 12px; text-transform: uppercase; letter-spacing: 3px; pointer-events: none; white-space: nowrap; z-index: 20; }
+.sheet-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #1e293b; padding-bottom: 6px; margin-bottom: 10px; }
+.sheet-title-block h1 { font-size: 1.25rem; margin: 0; color: #0f172a; }
+.sheet-title-block span { font-size: 0.84rem; color: #475569; font-weight: 600; }
+.student-meta { font-size: 0.88rem; }
+.line-fill { display: inline-block; border-bottom: 1.5px solid #334155; min-width: 135px; }
+.a4-sheet.norsk-sheet .sheet-header { padding-left: 12px; padding-right: 12px; }
+.sheet-header.matte-header, .sheet-header:has(+ .matte) { border-bottom: none; padding: 0 12px 4px 12px; margin-bottom: 8px; box-sizing: border-box; }
+.sheet-footer { border-top: 1px solid #cbd5e1; padding-top: 4px; font-size: 0.75rem; color: #64748b; display: flex; justify-content: space-between; }
+.a4-sheet.norsk-sheet .sheet-footer, .a4-sheet:not(.toc-sheet):not(.cover-back-sheet) .sheet-footer { font-size: 0.92rem; font-weight: 700; color: #1e293b; padding-left: 12px; padding-right: 12px; padding-top: 5px; padding-bottom: 0; margin-bottom: -4px; }
+.sheet-footer.hide-pagenum .page-num-text { visibility: hidden; }
+
+/* ==========================================================================
+   4. ARK 0: FORSIDE, INNHOLDSFORTEGNELSE & MELLOMSIDE
+   ========================================================================== */
+#sheet-page-cover .sheet-header, #sheet-page-cover .sheet-footer { display: none; }
+#sheet-page-cover .hefte-cover { min-height: 278mm; }
+.hefte-cover { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; height: 100%; min-height: 240mm; padding: 25mm 15mm; border: 3px dashed #cbd5e1; border-radius: 16px; box-sizing: border-box; }
+.cover-badge { background: #e0f2fe; color: #0369a1; font-weight: 700; padding: 6px 18px; border-radius: 999px; font-size: 14pt; text-transform: uppercase; letter-spacing: 1px; }
+.cover-title { font-size: 36pt; margin: 10mm 0 4mm; color: #1e293b; }
+.cover-subtitle { font-size: 16pt; color: #64748b; margin: 0; }
+.cover-illustration { font-size: 48pt; margin: 15mm 0; letter-spacing: 10px; }
+.cover-image { max-width: 110mm; max-height: 90mm; object-fit: contain; margin: 8mm 0; }
+.cover-name-box { width: 80%; text-align: left; background: #f8fafc; padding: 12mm; border-radius: 12px; border: 2px solid #e2e8f0; }
+.cover-name-box label { display: block; font-weight: 700; font-size: 13pt; color: #334155; margin-top: 6mm; }
+.cover-name-box label:first-child { margin-top: 0; }
+.cover-line { border-bottom: 2px solid #94a3b8; height: 10mm; }
+
+/* Innholdsfortegnelse (Side 2) */
+.a4-sheet.toc-sheet .sheet-inner-top { padding-top: 28px; padding-left: 24px; padding-right: 24px; }
+.a4-sheet.toc-sheet .sheet-header { margin-bottom: 22px; }
+.hefte-toc { padding-top: 4mm; }
+.toc-intro { color: #475569; margin-bottom: 8mm; font-size: 11pt; }
+.toc-list { display: flex; flex-direction: column; gap: 4.5mm; }
+.toc-row { display: flex; align-items: baseline; font-size: 11pt; color: #1e293b; }
+.toc-left { display: flex; gap: 6px; white-space: nowrap; }
+.toc-sheet { font-weight: 700; }
+.toc-week { color: #64748b; }
+.toc-letters { margin-left: 6px; color: #0369a1; }
+.toc-dots { flex: 1; border-bottom: 2px dotted #cbd5e1; margin: 0 8px; }
+.toc-right { display: flex; gap: 12px; white-space: nowrap; }
+.toc-subjects { color: #475569; font-size: 10pt; }
+.toc-page { font-weight: 700; min-width: 36px; text-align: right; }
+
+/* Mellomside i Ark 0 (Side 3) */
+.a4-sheet.cover-back-sheet .sheet-inner-top { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; }
+.hefte-cover.hefte-cover-faded { opacity: 0.22; transform: scale(0.75); transform-origin: center center; margin: auto; justify-content: center; }
+
+/* ==========================================================================
+   5. FELLES OPPGAVERAMMER FOR FAGARK
+   ========================================================================== */
+.subject-pill-tag { display: inline-block; font-size: 0.76rem; font-weight: 700; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 6px; vertical-align: middle; margin-left: 6px; }
+.subject-section { border: none; padding: 0; margin-bottom: 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
+.subject-banner { display: inline-block; align-self: flex-start; font-weight: 700; font-size: 1rem; padding: 4px 12px; border-radius: 7px; margin-bottom: 4px; }
+.norsk .subject-banner { background: #e0f2fe; color: #0369a1; }
+.matte .subject-banner { background: #ccfbf1; color: #115e59; }
+.task-block { border: 1.5px solid #94a3b8; border-radius: 12px; padding: 8px 14px; background: #ffffff; margin-bottom: 0; }
+.norsk .task-block { border-color: #0284c7; }
+.matte .task-block { border-color: #0d9488; }
+.task-title { font-weight: 700; font-size: 0.94rem; margin: 0 0 6px; }
+
+/* ==========================================================================
+   6. NORSK / SKRIVING
+   ========================================================================== */
+.letter-intro-stack { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.letter-pair-row { display: grid; grid-template-columns: 155px 1fr; gap: 14px; align-items: start; }
+.media-box { border: 1.5px dashed #94a3b8; border-radius: 10px; padding: 6px; height: 96px; min-height: 96px; margin-top: 21px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; }
+.media-box img { max-height: 82px; max-width: 100%; object-fit: contain; }
+.fallback-letter { font-size: 3rem; font-weight: 800; color: #0369a1; letter-spacing: 5px; }
+.bokstavhus-wrapper { width: 100%; height: 122px; display: flex; align-items: center; }
+.bokstavhus-svg { width: 100%; height: 122px; display: block; }
+.center-letter-badge { min-width: 124px; height: 96px; padding: 0 22px; border-radius: 48px; border: 3.5px solid #0284c7; background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 100%); box-shadow: 0 0 0 4px #f0f9ff, 0 4px 10px rgba(2, 132, 199, 0.14); display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 3rem; font-weight: 800; line-height: 1; }
+.badge-letter-pair { display: inline-block; transform: translateY(4px); }
+.match-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 90px; align-items: center; }
+.match-col { display: flex; flex-direction: column; gap: 12px; }
+.match-item { border: none; background: transparent; padding: 3px 0; display: flex; align-items: center; }
+.match-col.left-col .match-item { justify-content: flex-end; }
+.match-col.right-col .match-item { justify-content: flex-start; }
+.match-item .word-icon-img { width: 64px; height: 64px; object-fit: contain; }
+.match-item .word-emoji-fallback { font-size: 2.7rem; line-height: 1; }
+.task-letter { font-weight: 800; font-size: 2em; line-height: 1; }
+.vowel-letter { color: #dc2626; }
+.consonant-letter { color: #0284c7; }
+.word-houses-stack { display: flex; flex-direction: column; gap: 9px; }
+.word-house-row { width: 100%; }
+.ordhus-svg { width: 100%; height: auto; display: block; }
+.rhyme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: center; padding: 2px 40px; }
+.rhyme-col { display: flex; flex-direction: column; gap: 8px; }
+.rhyme-col.left-col .rhyme-item { justify-content: flex-end; }
+.rhyme-col.right-col .rhyme-item { justify-content: flex-start; }
+.rhyme-item { display: flex; align-items: center; }
+.rhyme-item .word-icon-img { width: 58px; height: 58px; object-fit: contain; }
+.rhyme-item .word-emoji-fallback { font-size: 2.4rem; line-height: 1; }
+.rhyme-grid-horizontal { display: flex; flex-direction: column; gap: 36px; padding: 4px 30px; }
+.rhyme-row { display: grid; grid-template-columns: repeat(3, 1fr); justify-items: center; align-items: center; }
+
+/* ==========================================================================
+   7. MATTE / REGNING
+   ========================================================================== */
+.matte.subject-section { justify-content: flex-start; gap: 22px; }
+.matte .task-block { padding: 14px 16px; }
+.matte .task-title { margin-bottom: 10px; }
+.symbol-row-break { flex-basis: 100%; height: 0; }
+.matte-hero-wrap { width: 100%; display: flex; justify-content: center; align-items: center; margin: 0 0 2px; }
+.matte-hero-img { width: 100%; height: auto; max-height: 98px; object-fit: fill; display: block; }
+
+/* Oppgave 1: Tallinnlæring */
+.number-practice-grid { display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: 78px; border-top: 1.5px solid #334155; border-left: 1.5px solid #334155; border-radius: 6px; overflow: hidden; background: #ffffff; }
+.number-practice-cell { border-right: 1.5px solid #334155; border-bottom: 1.5px solid #334155; display: flex; align-items: center; justify-content: center; padding: 4px; }
+.number-trace-svg { height: 64px; width: auto; max-width: 100%; overflow: visible; }
+.number-font-fallback { font-family: "Trykkskrift", sans-serif; font-size: 56px; line-height: 1; }
+
+/* Oppgave 2 & 3: Terning og nabotall */
+.task-block-split { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 20px; align-items: stretch; }
+.task-split-col { display: flex; flex-direction: column; }
+.task-block-split .task-split-col:last-child { border-left: 1.5px dashed #cbd5e1; padding-left: 20px; }
+.dice-area { flex: 1; display: flex; align-items: center; justify-content: center; gap: 18px; padding: 8px 0; }
+.dice-svg { width: 92px; height: 92px; overflow: visible; }
+.neighbor-rows { display: flex; flex-direction: column; gap: 12px; }
+.neighbor-row { display: flex; align-items: center; gap: 8px; }
+.num-box { width: 52px; height: 42px; border: 2px solid #0f766e; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: #ffffff; font-size: 1.2rem; font-weight: 700; box-sizing: border-box; }
+.num-box.filled, .num-box.given { background: #ccfbf1; }
+.dash { font-weight: 700; color: #64748b; }
+
+/* Oppgave 4: Mengder */
+.quantity-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.quantity-card { border: 1px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; min-height: 76px; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center; row-gap: 4px; column-gap: 8px; line-height: 1; }
+.quantity-img { width: 38px; height: 38px; object-fit: contain; display: block; }
+
+/* Oppgave 5: Tell og skriv */
+.count-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.count-card { border: 1px solid #cbd5e1; border-radius: 10px; padding: 8px 10px; min-height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #f8fafc; }
+.count-symbols { font-size: 1.5rem; line-height: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center; row-gap: 3px; column-gap: 4px; flex: 1; }
+.count-img { width: 25px; height: 25px; object-fit: contain; display: block; }
+.count-answer { width: 46px; height: 46px; flex-shrink: 0; background: #ffffff; }
+
+/* Ark 11 og 12 i matte: Kompakte bilder ved 3 linjer */
+#sheet-page-11-matte .quantity-card, #sheet-page-12-matte .quantity-card { padding: 5px 10px; min-height: 68px; row-gap: 2px; column-gap: 6px; }
+#sheet-page-11-matte .quantity-img, #sheet-page-12-matte .quantity-img { width: 28px; height: 28px; }
+#sheet-page-11-matte .count-card, #sheet-page-12-matte .count-card { padding: 5px 8px; min-height: 68px; }
+#sheet-page-11-matte .count-symbols, #sheet-page-12-matte .count-symbols { row-gap: 2px; column-gap: 3px; }
+#sheet-page-11-matte .count-img, #sheet-page-12-matte .count-img { width: 24px; height: 24px; }
+
+/* ==========================================================================
+   8. MODALER & DIALOGBOKSER
+   ========================================================================== */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); display: flex; align-items: center; justify-content: center; z-index: 60; }
+.modal-box { background: #ffffff; padding: 20px; border-radius: 12px; width: 350px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22); }
+.modal-box.modal-wide { width: 480px; max-width: 94vw; }
+.modal-box h2 { margin: 0 0 6px; font-size: 1.1rem; }
+.modal-box p { margin: 0 0 14px; font-size: 0.85rem; color: var(--text-muted); }
+.form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+.form-group label { font-size: 0.82rem; font-weight: 600; }
+.form-group input { padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 0.9rem; }
+.weeks-editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 55vh; overflow-y: auto; margin-bottom: 14px; }
+.week-edit-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #f8fafc; padding: 6px 8px; border-radius: 7px; border: 1px solid #e2e8f0; font-size: 0.82rem; font-weight: 600; }
+.week-edit-item input { width: 95px; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 0.82rem; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.btn-modal-pri { background: var(--blue-main); color: #ffffff; border: none; border-radius: 7px; padding: 7px 14px; font-weight: 600; cursor: pointer; }
+.btn-modal-sec { background: #e2e8f0; color: var(--text-dark); border: none; border-radius: 7px; padding: 7px 14px; font-weight: 600; cursor: pointer; }
+.hidden { display: none !important; }
+.error-text { color: #dc2626; font-size: 0.82rem; margin: 4px 0 8px; }
+
+/* ==========================================================================
+   9. UTSKRIFT (PRINT A4)
+   ========================================================================== */
+@page { size: A4 portrait; margin: 0; }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body, html { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
+  .no-print, .sidebar { display: none !important; }
+  .preview-area { display: block !important; padding: 0 !important; margin: 0 !important; gap: 0 !important; background: #ffffff !important; overflow: visible !important; }
+  .a4-sheet { width: 210mm !important; height: 297mm !important; border: none !important; box-shadow: none !important; margin: 0 !important; page-break-after: always; break-after: page; }
+  .a4-sheet:last-child { page-break-after: auto; break-after: auto; }
+}
