@@ -23,7 +23,14 @@
             <p class="subtitle">Utskriftsklare arbeidsark</p>
           </div>
         </div>
-        <div id="auth-btn-wrapper"></div>
+<div id="auth-btn-wrapper">
+          <button type="button" id="sidebarLoginBtn" class="btn-login-pill">
+            🔒 Logg inn
+          </button>
+          <button type="button" id="sidebarLogoutBtn" class="btn-login-pill logged-in hidden">
+            ✓ Hånes skole (Logg ut)
+          </button>
+        </div>
       </div>
 
       <div class="sidebar-section-label">VELG UKE / ARK</div>
@@ -61,28 +68,46 @@
     </main>
   </div>
 
-  <!-- MODAL: INNLOGGING -->
-  <div id="login-modal" class="modal-backdrop hidden no-print">
-    <div class="modal-box">
-      <h2>Logg inn – Hånes skole</h2>
-      <p>Logg inn for å fjerne prøveeksemplar-vannmerket før utskrift.</p>
-      <form id="login-form">
-        <div class="form-group">
-          <label for="login-user">Brukernavn</label>
-          <input type="text" id="login-user" autocomplete="username" required />
-        </div>
-        <div class="form-group">
-          <label for="login-pass">Passord</label>
-          <input type="password" id="login-pass" autocomplete="current-password" required />
-        </div>
-        <p id="login-error" class="error-text hidden">Feil brukernavn eller passord.</p>
-        <div class="modal-actions">
-          <button type="button" id="btn-close-login" class="btn-modal-sec">Avbryt</button>
-          <button type="submit" class="btn-modal-pri">Logg inn</button>
-        </div>
-      </form>
+<!-- INNLOGGINGSMODAL FOR HÅNES SKOLE -->
+<div id="loginModal" class="modal-backdrop no-print">
+  <div class="auth-modal-box">
+    <div class="auth-modal-header">
+      <div class="auth-modal-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      </div>
+      <div>
+        <h3>Arbeidshefte – Hånes skole</h3>
+        <p>Logg inn for utskrift uten vannmerke</p>
+      </div>
     </div>
+
+    <form id="haanesLoginForm" class="auth-modal-form">
+      <div class="auth-field">
+        <label for="loginUsername">Brukernavn</label>
+        <input type="text" id="loginUsername" autocomplete="username" placeholder="Skriv inn brukernavn" />
+      </div>
+
+      <div class="auth-field">
+        <label for="loginPassword">Passord</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Skriv inn passord" />
+      </div>
+
+      <p id="loginErrorMsg" class="auth-error-msg hidden">
+        ⚠️ Feil brukernavn eller passord. Prøv igjen.
+      </p>
+
+      <button type="submit" class="auth-btn-primary">
+        Logg inn
+      </button>
+
+      <div class="auth-divider"><span>eller</span></div>
+
+      <button type="button" id="btnContinueWatermark" class="auth-btn-secondary">
+        Åpne uten innlogging (med «Hånes skole»-vannmerke)
+      </button>
+    </form>
   </div>
+</div>
 
   <!-- MODAL: REDIGER UKENUMRE -->
   <div id="weeks-modal" class="modal-backdrop hidden no-print">
@@ -373,8 +398,7 @@
   <script src="matte/matte_10.js"></script>
   <script src="matte/matte_11.js"></script>
   <script src="matte/matte_12.js"></script>
-  <script src="matte/matte_13.js"></script>
-  <script src="matte/matte_14.js"></script>
+
 
   <!-- Hovedlogikk -->
   <script src="app.js"></script>

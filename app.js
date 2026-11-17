@@ -21,7 +21,7 @@
     return `Uke ${week}`;
   }
 
-  function createDefaultSettings() {
+function createDefaultSettings() {
     const map = {};
     for (let i = 0; i <= TOTAL_SHEETS; i++) {
       if (i === 0) {
@@ -39,10 +39,10 @@
           intro: true,
           match: true,
           words: true,
-          onlyFirstWord: false,
-          rhyme: false
+          onlyFirstWord: true,
+          rhyme: true
         },
-      matte: {
+        matte: {
           show: true,
           intro: true,
           dice: true,
@@ -92,51 +92,100 @@ function loadSettings() {
     }
   }
 
-  function isLoggedIn() {
-    return sessionStorage.getItem(AUTH_KEY) === "true";
-  }
-
   const ICON_DOC = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
   const ICON_EYE_OPEN = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
   const ICON_EYE_OFF = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
-  const ICON_LOCK = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
 
-  // INNLOGGING
-  function renderAuthButton() {
-    const wrapper = document.getElementById("auth-btn-wrapper");
-    if (isLoggedIn()) {
-      wrapper.innerHTML = `<button type="button" id="btn-logout" class="btn-login-pill logged-in" title="Klikk for å logge ut">✓ Hånes skole</button>`;
-      document.getElementById("btn-logout").addEventListener("click", () => {
-        sessionStorage.removeItem(AUTH_KEY);
-        renderAuthButton();
-        renderSheets();
-      });
+  // ==========================================
+  // INNLOGGING OG VANNMERKE FOR HÅNES SKOLE
+  // ==========================================
+  const HAANES_AUTH = {
+    user: "Haanes",
+    pass: "Hest1234",
+    storageKey: "haanes_arbeidshefte_auth"
+  };
+
+  function updateAuthButtons(isLoggedIn) {
+    const loginBtn = document.getElementById("sidebarLoginBtn");
+    const logoutBtn = document.getElementById("sidebarLogoutBtn");
+
+    if (isLoggedIn) {
+      if (loginBtn) loginBtn.classList.add("hidden");
+      if (logoutBtn) logoutBtn.classList.remove("hidden");
     } else {
-      wrapper.innerHTML = `<button type="button" id="btn-open-login" class="btn-login-pill">${ICON_LOCK} Logg inn</button>`;
-      document.getElementById("btn-open-login").addEventListener("click", () => {
-        document.getElementById("login-modal").classList.remove("hidden");
-      });
+      if (loginBtn) loginBtn.classList.remove("hidden");
+      if (logoutBtn) logoutBtn.classList.add("hidden");
     }
   }
 
-  document.getElementById("btn-close-login").addEventListener("click", () => {
-    document.getElementById("login-modal").classList.add("hidden");
-  });
+  function openLoginModal() {
+    const modal = document.getElementById("loginModal");
+    const errorMsg = document.getElementById("loginErrorMsg");
+    if (errorMsg) errorMsg.classList.add("hidden");
+    if (modal) modal.classList.remove("hidden");
+  }
 
-  document.getElementById("login-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const user = document.getElementById("login-user").value.trim();
-    const pass = document.getElementById("login-pass").value;
-    if (user === "Haanes" && pass === "Hest1234") {
-      sessionStorage.setItem(AUTH_KEY, "true");
-      document.getElementById("login-error").classList.add("hidden");
-      document.getElementById("login-modal").classList.add("hidden");
-      renderAuthButton();
-      renderSheets();
+  function handleLoginSubmit(event) {
+    event.preventDefault();
+    const usernameInput = document.getElementById("loginUsername").value.trim();
+    const passwordInput = document.getElementById("loginPassword").value;
+    const errorMsg = document.getElementById("loginErrorMsg");
+
+    if (usernameInput.toLowerCase() === HAANES_AUTH.user.toLowerCase() && passwordInput === HAANES_AUTH.pass) {
+      sessionStorage.setItem(HAANES_AUTH.storageKey, "logged_in");
+      document.body.classList.remove("show-watermark");
+      document.getElementById("loginModal").classList.add("hidden");
+      if (errorMsg) errorMsg.classList.add("hidden");
+      updateAuthButtons(true);
     } else {
-      document.getElementById("login-error").classList.remove("hidden");
+      if (errorMsg) errorMsg.classList.remove("hidden");
     }
-  });
+  }
+
+  function continueWithWatermark() {
+    sessionStorage.setItem(HAANES_AUTH.storageKey, "guest");
+    document.body.classList.add("show-watermark");
+    document.getElementById("loginModal").classList.add("hidden");
+    updateAuthButtons(false);
+  }
+
+  function logoutUser() {
+    sessionStorage.removeItem(HAANES_AUTH.storageKey);
+    document.body.classList.add("show-watermark");
+    updateAuthButtons(false);
+    openLoginModal();
+  }
+
+  function initAuthWatermark() {
+    const savedState = sessionStorage.getItem(HAANES_AUTH.storageKey);
+    const modal = document.getElementById("loginModal");
+
+    if (savedState === "logged_in") {
+      document.body.classList.remove("show-watermark");
+      if (modal) modal.classList.add("hidden");
+      updateAuthButtons(true);
+    } else if (savedState === "guest") {
+      document.body.classList.add("show-watermark");
+      if (modal) modal.classList.add("hidden");
+      updateAuthButtons(false);
+    } else {
+      document.body.classList.add("show-watermark");
+      if (modal) modal.classList.remove("hidden");
+      updateAuthButtons(false);
+    }
+
+    const form = document.getElementById("haanesLoginForm");
+    if (form) form.addEventListener("submit", handleLoginSubmit);
+
+    const guestBtn = document.getElementById("btnContinueWatermark");
+    if (guestBtn) guestBtn.addEventListener("click", continueWithWatermark);
+
+    const loginBtn = document.getElementById("sidebarLoginBtn");
+    if (loginBtn) loginBtn.addEventListener("click", openLoginModal);
+
+    const logoutBtn = document.getElementById("sidebarLogoutBtn");
+    if (logoutBtn) logoutBtn.addEventListener("click", logoutUser);
+  }
 
   // REDIGER UKENUMRE-MODAL
   document.getElementById("btn-edit-weeks").addEventListener("click", () => {
@@ -914,7 +963,7 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
 
 
 // BYGG ENKELT A4-SIDE
-  function createA4PageElement({ id, title, weekLabel, subjectTag, bodyHTML, guest, pageIndex, totalPages }) {
+  function createA4PageElement({ id, title, weekLabel, subjectTag, bodyHTML, pageIndex, totalPages }) {
     const article = document.createElement("article");
     article.id = id;
 
@@ -949,7 +998,6 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
     const hideHeaderFooter = id === "sheet-page-cover-back" || id === "sheet-page-cover";
 
     article.innerHTML = `
-      ${guest ? `<div class="watermark-stamp">HÅNES SKOLE</div>` : ""}
       <div class="sheet-inner-top">
         ${hideHeaderFooter ? "" : `
           <header class="sheet-header">
@@ -976,6 +1024,7 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
     return article;
   }
 
+
     const NUMBER_WORDS = {
       1: "en", 2: "to", 3: "tre", 4: "fire", 5: "fem",
       6: "seks", 7: "sju", 8: "åtte", 9: "ni", 10: "ti",
@@ -987,7 +1036,6 @@ if (cfg.count && Array.isArray(matte.telleOppgaver)) {
 // RENDER ALLE SYNLIGE A4-SIDER (NORSK OG MATTE HVER FOR SEG)
   function renderSheets() {
 
-    const guest = !isLoggedIn();
     const sheetsContainerEl = document.getElementById("sheets-container");
     sheetsContainerEl.innerHTML = "";
 
@@ -1149,7 +1197,6 @@ const endPage = currentPageNum - 1;
     pagesToRender.forEach((pageData, idx) => {
       const pageEl = createA4PageElement({
         ...pageData,
-        guest,
         pageIndex: idx + 1,
         totalPages: pagesToRender.length
       });
@@ -1363,7 +1410,7 @@ function setupPrintModals() {
   }
 
   // INIT
-  renderAuthButton();
+  initAuthWatermark();
   renderSidebarCards();
   renderSheets();
 })();
