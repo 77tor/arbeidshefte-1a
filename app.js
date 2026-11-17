@@ -1300,12 +1300,19 @@ function setupPrintModals() {
       filePicker.click();
     });
 
-    filePicker.addEventListener("change", (e) => {
+filePicker.addEventListener("change", (e) => {
       const file = e.target.files && e.target.files[0];
-      if (file) {
-        const blobUrl = URL.createObjectURL(file);
-        window.open(blobUrl, "_blank");
-      }
+      if (!file) return;
+
+      const blobUrl = URL.createObjectURL(file);
+
+      const tempLink = document.createElement("a");
+      tempLink.href = blobUrl;
+      tempLink.target = "_blank";
+      tempLink.rel = "noopener";
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
     });
 
     // Fanebytter (I nettleseren / I Adobe Reader)
