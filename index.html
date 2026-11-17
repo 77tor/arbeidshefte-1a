@@ -252,7 +252,7 @@
       <button type="button" class="pmodal-close" data-close-pmodal="pdf-ready-modal">✕</button>
     </div>
 
-    <div class="pmodal-body">
+<div class="pmodal-body">
       <div class="pmodal-open-pdf-banner">
         <h3>1. Åpne den lagrede PDF-filen:</h3>
         <p>Klikk på knappen under for å åpne PDF-en i nettleseren, eller åpne filen direkte i <strong>Adobe Reader</strong> fra datamaskinen:</p>
@@ -260,6 +260,11 @@
         <button type="button" class="pmodal-btn pmodal-btn-blue" id="btn-open-saved-pdf">
           📁 Velg og åpne PDF-filen i nettleser
         </button>
+        <div id="opened-pdf-link-wrap" class="hidden" style="margin-top: 6px;">
+          <a id="opened-pdf-link" href="#" target="_blank" rel="noopener" class="pmodal-btn pmodal-btn-green" style="text-decoration: none;">
+            📄 Klikk her for å åpne PDF-en i ny fane →
+          </a>
+        </div>
       </div>
 
       <div class="pmodal-step2-header">

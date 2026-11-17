@@ -1293,26 +1293,35 @@ function setupPrintModals() {
       }
     });
 
-    // Velg og åpne lagret PDF-fil i ny fane i nettleseren
+// Velg og åpne lagret PDF-fil i ny fane i nettleseren
     const filePicker = document.getElementById("pdf-file-picker");
+    let currentBlobUrl = null;
+
     document.getElementById("btn-open-saved-pdf").addEventListener("click", () => {
       filePicker.value = "";
       filePicker.click();
     });
 
-filePicker.addEventListener("change", (e) => {
+    filePicker.addEventListener("change", (e) => {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
 
-      const blobUrl = URL.createObjectURL(file);
+      if (currentBlobUrl) {
+        URL.revokeObjectURL(currentBlobUrl);
+      }
+      currentBlobUrl = URL.createObjectURL(file);
 
-      const tempLink = document.createElement("a");
-      tempLink.href = blobUrl;
-      tempLink.target = "_blank";
-      tempLink.rel = "noopener";
-      document.body.appendChild(tempLink);
-      tempLink.click();
-      document.body.removeChild(tempLink);
+      const linkWrap = document.getElementById("opened-pdf-link-wrap");
+      const pdfLink = document.getElementById("opened-pdf-link");
+      if (pdfLink && linkWrap) {
+        pdfLink.href = currentBlobUrl;
+        pdfLink.textContent = `📄 Åpne «${file.name}» i ny fane →`;
+        linkWrap.classList.remove("hidden");
+      }
+
+      setTimeout(() => {
+        window.open(currentBlobUrl, "_blank", "noopener");
+      }, 150);
     });
 
     // Fanebytter (I nettleseren / I Adobe Reader)
