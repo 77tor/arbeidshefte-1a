@@ -4,14 +4,15 @@
 @font-face { font-family: "Trykkskrift"; src: url("skrift/Tor-trykkskrift.otf") format("opentype"); font-weight: normal; font-style: normal; font-display: swap; }
 :root { --blue-main: #0277bd; --blue-hover: #01579b; --blue-tint: #e1f5fe; --blue-border: #38bdf8; --amber-bg: #fef3c7; --amber-border: #f59e0b; --amber-text: #92400e; --bg-canvas: #cbd5e1; --sidebar-bg: #f1f5f9; --card-bg: #ffffff; --border: #e2e8f0; --text-dark: #0f172a; --text-muted: #64748b; }
 * { box-sizing: border-box; }
-body, button, input { margin: 0; font-family: "Trykkskrift", "Segoe UI", system-ui, -apple-system, sans-serif; }
+body, button, input, select, textarea { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
 body { background: var(--bg-canvas); color: var(--text-dark); }
+.a4-sheet { font-family: "Trykkskrift", "Segoe UI", system-ui, -apple-system, sans-serif; }
 .app-layout { display: flex; min-height: 100vh; }
 
 /* ==========================================================================
    2. VENSTREMENY (SIDEBAR & ARK-KORT)
    ========================================================================== */
-.sidebar { width: 390px; min-width: 390px; background: var(--sidebar-bg); border-right: 1px solid #cbd5e1; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; z-index: 30; }
+.sidebar { width: 450px; min-width: 450px; flex: 0 0 450px; background: var(--sidebar-bg); border-right: 1px solid #cbd5e1; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; z-index: 30; }
 .sidebar-top { padding: 16px 16px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--sidebar-bg); }
 .brand-group { display: flex; align-items: center; gap: 10px; }
 .brand-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--blue-main); color: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -38,6 +39,18 @@ body { background: var(--bg-canvas); color: var(--text-dark); }
 .pill-btn:last-child { border-right: none; }
 .pill-btn:hover { background: #f8fafc; }
 .pill-btn.active { background: var(--blue-main); color: #ffffff; }
+
+/* Grønn farge for aktive matte-knapper i venstremenyen */
+.pill-btn[data-mode="matte"].active {
+  background: #15803d;
+  color: #ffffff;
+}
+
+.mini-chip[data-sub^="matte."].on {
+  background: #dcfce7;
+  border-color: #4ade80;
+  color: #166534;
+}
 .card-subtasks-row { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0; display: flex; flex-wrap: wrap; gap: 5px; }
 .mini-chip { font-size: 0.7rem; font-weight: 600; padding: 3px 7px; border-radius: 5px; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; }
 .mini-chip.on { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
@@ -148,21 +161,37 @@ body.show-watermark #sheet-page-cover-back::after {
 .a4-sheet.norsk-sheet .sheet-footer, .a4-sheet:not(.toc-sheet):not(.cover-back-sheet) .sheet-footer { font-size: 0.92rem; font-weight: 700; color: #1e293b; padding-left: 12px; padding-right: 12px; padding-top: 5px; padding-bottom: 0; margin-bottom: -4px; }
 .sheet-footer.hide-pagenum .page-num-text { visibility: hidden; }
 
+
 /* ==========================================================================
    4. ARK 0: FORSIDE, INNHOLDSFORTEGNELSE & MELLOMSIDE
    ========================================================================== */
-#sheet-page-cover .sheet-header, #sheet-page-cover .sheet-footer { display: none; }
+#sheet-page-cover .sheet-header, #sheet-page-cover .sheet-footer, #sheet-page-cover-back .sheet-header, #sheet-page-cover-back .sheet-footer { display: none; }
 #sheet-page-cover .hefte-cover { min-height: 278mm; }
-.hefte-cover { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; height: 100%; min-height: 240mm; padding: 25mm 15mm; border: 3px dashed #cbd5e1; border-radius: 16px; box-sizing: border-box; }
-.cover-badge { background: #e0f2fe; color: #0369a1; font-weight: 700; padding: 6px 18px; border-radius: 999px; font-size: 14pt; text-transform: uppercase; letter-spacing: 1px; }
-.cover-title { font-size: 36pt; margin: 10mm 0 4mm; color: #1e293b; }
-.cover-subtitle { font-size: 16pt; color: #64748b; margin: 0; }
-.cover-illustration { font-size: 48pt; margin: 15mm 0; letter-spacing: 10px; }
-.cover-image { max-width: 110mm; max-height: 90mm; object-fit: contain; margin: 8mm 0; }
-.cover-name-box { width: 80%; text-align: left; background: #f8fafc; padding: 12mm; border-radius: 12px; border: 2px solid #e2e8f0; }
-.cover-name-box label { display: block; font-weight: 700; font-size: 13pt; color: #334155; margin-top: 6mm; }
-.cover-name-box label:first-child { margin-top: 0; }
-.cover-line { border-bottom: 2px solid #94a3b8; height: 10mm; }
+.hefte-cover { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; min-height: 278mm; background: #ffffff; border: 3px solid #059669; border-radius: 16px; overflow: hidden; box-sizing: border-box; }
+.cover-inner-border { position: absolute; inset: 4px; border: 1px solid #e2e8f0; border-radius: 12px; pointer-events: none; z-index: 20; }
+.cover-top-blobs { position: absolute; top: 0; left: 0; right: 0; height: 13mm; overflow: hidden; pointer-events: none; }
+.cover-blob-top-1 { position: absolute; top: -10mm; left: 25%; width: 66%; height: 20mm; background: #dcfce7; border-radius: 9999px; }
+.cover-blob-top-2 { position: absolute; top: -14mm; right: 0; width: 50%; height: 24mm; background: #bbf7d0; border-radius: 9999px; opacity: 0.85; }
+.cover-bottom-blobs { position: absolute; bottom: 0; left: 0; right: 0; height: 13mm; overflow: hidden; pointer-events: none; }
+.cover-blob-bot-1 { position: absolute; bottom: -10mm; left: -10%; width: 120%; height: 20mm; background: #dcfce7; border-radius: 50%; }
+.cover-blob-bot-2 { position: absolute; bottom: -14mm; right: -10%; width: 120%; height: 20mm; background: #86efac; border-radius: 50%; opacity: 0.8; }
+.cover-header-block { position: relative; z-index: 10; margin-top: 14mm; padding: 0 5mm; width: 100%; }
+.cover-title { font-size: 36pt; font-weight: 700; color: #052e16; line-height: 1.15; margin: 4mm 0 0; }
+.cover-divider { width: 75%; height: 6px; margin: 3mm auto 0; border-radius: 9999px; background: #4ade80; }
+.cover-subtitle { font-size: 16pt; color: #64748b; font-weight: 500; margin: 4mm 0 0; }
+.cover-info-box { position: relative; z-index: 10; width: 86%; max-width: 150mm; background: #f0fdf4; border: 2px solid #4ade80; border-radius: 16px; padding: 6mm 7mm; margin-top: 8mm; text-align: left; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.cover-bullets { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4mm; color: #1e293b; font-size: 13.5pt; font-weight: 500; }
+.cover-bullets li { display: flex; align-items: flex-start; gap: 3mm; line-height: 1.45; }
+.cover-dot { display: inline-block; width: 3mm; height: 3mm; border-radius: 9999px; background: #15803d; margin-top: 2.2mm; flex-shrink: 0; }
+.cover-image-wrap { position: relative; z-index: 10; width: 86%; max-width: 150mm; margin-top: 7mm; margin-bottom: 4mm; }
+.cover-image-frame { background: #ffffff; border: 3px solid #22c55e; border-radius: 26px; padding: 5mm; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+.cover-image { width: 100%; max-height: 82mm; object-fit: contain; border-radius: 12px; display: block; margin: 0; }
+.cover-bottom-area { position: relative; z-index: 10; margin-top: 0; margin-bottom: 9mm; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4.5mm; }.cover-name-box { display: flex; align-items: flex-end; gap: 4mm; width: 86%; max-width: 150mm; margin: auto 0; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 5mm 7mm; font-size: 14pt; color: #14532d; }.cover-name-box { display: flex; align-items: flex-end; gap: 4mm; width: 86%; max-width: 150mm; margin-top: 6mm; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 5mm 7mm; font-size: 14pt; color: #14532d; }
+.cover-line { flex: 1; border-bottom: 2px solid #22c55e; height: 6mm; min-width: 18mm; }
+.cover-line:first-of-type { flex: 2.2; }
+.cover-school-footer { display: flex; align-items: center; justify-content: center; gap: 4mm; width: 100%; padding: 0 8mm; }
+.cover-school-footer .school-line { height: 2px; flex: 1; max-width: 22mm; background: #16a34a; }
+.cover-school-footer .school-name { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; color: #14532d; font-weight: 700; font-size: 10pt; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
 
 /* Innholdsfortegnelse (Side 2) */
 .a4-sheet.toc-sheet .sheet-inner-top { padding-top: 28px; padding-left: 24px; padding-right: 24px; }
@@ -179,10 +208,11 @@ body.show-watermark #sheet-page-cover-back::after {
 .toc-right { display: flex; gap: 12px; white-space: nowrap; }
 .toc-subjects { color: #475569; font-size: 10pt; }
 .toc-page { font-weight: 700; min-width: 36px; text-align: right; }
+.a4-sheet:has(.hefte-toc) .sheet-header > *:first-child, .a4-sheet:has(.hefte-toc) .sheet-header > *:first-child * { font-size: 36pt !important; }
 
 /* Mellomside i Ark 0 (Side 3) */
 .a4-sheet.cover-back-sheet .sheet-inner-top { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; }
-.hefte-cover.hefte-cover-faded { opacity: 0.22; transform: scale(0.75); transform-origin: center center; margin: auto; justify-content: center; }
+.hefte-cover.hefte-cover-faded { opacity: 0.22; transform: scale(0.75); transform-origin: center center; margin: auto; }
 
 /* ==========================================================================
    5. FELLES OPPGAVERAMMER FOR FAGARK
@@ -379,3 +409,71 @@ body.show-watermark #sheet-page-cover-back::after {
 .pmodal-open-pdf-banner p { margin: 0; font-size: 0.85rem; color: #475569; }
 .pmodal-zoom-body { padding: 16px; background: #0f172a; display: flex; justify-content: center; align-items: center; overflow: auto; }
 .pmodal-zoom-body img { max-width: 100%; max-height: 78vh; border-radius: 8px; background: #ffffff; }
+
+/* FLYTENDE ZOOM-KONTROLL */
+.floating-zoom {
+  position: fixed;
+  top: 50%;
+  right: 16px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 44px;
+  padding: 5px;
+  transform: translateY(-50%);
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.12);
+}
+
+.floating-zoom button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #475569;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.floating-zoom button:hover {
+  background: #eff6ff;
+  color: #0284c7;
+}
+
+#zoomValText {
+  width: 38px;
+  height: auto;
+  padding: 4px 0;
+  border-radius: 8px;
+  color: #0284c7;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  white-space: pre-line;
+}
+
+@media print {
+  .floating-zoom,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Sikre at utskrift alltid bruker 100 % naturlig A4-størrelse uten CSS-skalering */
+  #sheets-container .a4-sheet {
+    transform: none !important;
+    margin-bottom: 0 !important;
+  }
+}

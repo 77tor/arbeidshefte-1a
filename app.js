@@ -233,15 +233,16 @@ document.getElementById("btn-reset-weeks").addEventListener("click", () => {
 
 setupPrintModals();
 
-  // RENDER KORTENE I VENSTREMENYEN (1–14)
+// RENDER KORTENE I VENSTREMENYEN (1–14)
   function renderSidebarCards() {
     const container = document.getElementById("sheet-cards-list");
     container.innerHTML = "";
 
-// KORT FOR ARK 0 (FORSIDE & INNHOLDSFORTEGNELSE)
+    // KORT FOR ARK 0 (FORSIDE & INNHOLDSFORTEGNELSE)
     const cfg0 = sheetSettings[0];
     const isCoverSelected = activeSheet === 0;
     const coverCard = document.createElement("div");
+    coverCard.dataset.sheet = "0";
     coverCard.className =
       "sheet-card" +
       (isCoverSelected ? " active" : "") +
@@ -270,6 +271,10 @@ setupPrintModals();
 
     coverCard.addEventListener("click", (e) => {
       if (e.target.closest("button")) return;
+      isManualSidebarClick = true;
+      clearTimeout(manualClickTimer);
+      manualClickTimer = setTimeout(() => { isManualSidebarClick = false; }, 700);
+
       activeSheet = 0;
       renderSidebarCards();
       const target = document.getElementById("sheet-page-cover") || document.getElementById("sheet-page-toc");
@@ -309,6 +314,7 @@ setupPrintModals();
       else if (!cfg.norsk.show && cfg.matte.show) mode = "matte";
 
       const card = document.createElement("div");
+      card.dataset.sheet = String(i);
       card.className =
         "sheet-card" +
         (isSelected ? " active" : "") +
@@ -363,6 +369,10 @@ setupPrintModals();
 
       card.addEventListener("click", (e) => {
         if (e.target.closest("button")) return;
+        isManualSidebarClick = true;
+        clearTimeout(manualClickTimer);
+        manualClickTimer = setTimeout(() => { isManualSidebarClick = false; }, 700);
+
         activeSheet = i;
         renderSidebarCards();
         const targetSheet =
@@ -444,6 +454,8 @@ setupPrintModals();
       container.appendChild(card);
     }
   }
+
+
 
   // BYGG ETT BREDT BOKSTAVHUS (SVG) MED RØDT TAK FOR VOKALER OG BLÅTT TAK FOR KONSONANTER
   function renderBokstavhusSVG(upper) {
@@ -1118,7 +1130,7 @@ const endPage = currentPageNum - 1;
 
     const pagesToRender = [];
 
-    // 1. FORSIDE (SIDE 1)
+// 1. FORSIDE (SIDE 1)
     if (showCover) {
       pagesToRender.push({
         id: "sheet-page-cover",
@@ -1128,20 +1140,52 @@ const endPage = currentPageNum - 1;
         isCover: true,
         bodyHTML: `
           <div class="hefte-cover">
-            <div class="cover-badge">Arbeidshefte</div>
-            <h1 class="cover-title">Skriving & Regning</h1>
-            <img src="bilder/forside_arbeidshefte.png" alt="Forsideillustrasjon" class="cover-image" />
+            <div class="cover-inner-border"></div>
+            <div class="cover-top-blobs">
+              <div class="cover-blob-top-1"></div>
+              <div class="cover-blob-top-2"></div>
+            </div>
+
+            <div class="cover-header-block">
+              <h1 class="cover-title">Arbeidshefte for 1. trinn</h1>
+              <div class="cover-divider"></div>
+              <p class="cover-subtitle">Bokstaver &amp; Tall</p>
+            </div>
+
+            <div class="cover-info-box">
+              <ul class="cover-bullets">
+                <li><span class="cover-dot"></span><span>Heftet tar for seg hvordan bokstavene og tallene skrives.</span></li>
+                <li><span class="cover-dot"></span><span>Det er lagt inn enkle øveoppgaver.</span></li>
+              </ul>
+            </div>
+
+            <div class="cover-image-wrap">
+              <div class="cover-image-frame">
+                <img src="bilder/forside_arbeidshefte.png" alt="Forsideillustrasjon" class="cover-image" />
+              </div>
+            </div>
+
             <div class="cover-name-box">
               <label>Navn:</label>
               <div class="cover-line"></div>
-              <label>Klasse:</label>
-              <div class="cover-line"></div>
+            </div>
+
+            <div class="cover-bottom-area">
+              <div class="cover-school-footer">
+                <div class="school-line"></div>
+                <span class="school-name">HÅNES SKOLEENHET</span>
+                <div class="school-line"></div>
+              </div>
+            </div>
+
+            <div class="cover-bottom-blobs">
+              <div class="cover-blob-bot-1"></div>
+              <div class="cover-blob-bot-2"></div>
             </div>
           </div>
         `
       });
     }
-
 
 // 2. INNHOLDSFORTEGNELSE (SIDE 2)
     if (showToc) {
@@ -1179,7 +1223,7 @@ const endPage = currentPageNum - 1;
       });
     }
 
-    // 3. MELLOMSIDE I ARK 0 (SIDE 3: SVAK FORSIDE UTEN NAVN/KLASSE)
+// 3. MELLOMSIDE I ARK 0 (SIDE 3: SVAK FORSIDE UTEN NAVN/KLASSE)
     if (showCoverBack) {
       pagesToRender.push({
         id: "sheet-page-cover-back",
@@ -1189,15 +1233,49 @@ const endPage = currentPageNum - 1;
         isCover: true,
         bodyHTML: `
           <div class="hefte-cover hefte-cover-faded">
-            <div class="cover-badge">Arbeidshefte</div>
-            <h1 class="cover-title">Skriving & Regning</h1>
-            <img src="bilder/forside_arbeidshefte.png" alt="Forsideillustrasjon" class="cover-image" />
+            <div class="cover-inner-border"></div>
+            <div class="cover-top-blobs">
+              <div class="cover-blob-top-1"></div>
+              <div class="cover-blob-top-2"></div>
+            </div>
+
+            <div class="cover-header-block">
+              <h1 class="cover-title">Arbeidshefte</h1>
+              <div class="cover-divider"></div>
+              <p class="cover-subtitle">Skriving &amp; Regning</p>
+            </div>
+
+            <div class="cover-info-box">
+              <ul class="cover-bullets">
+                <li><span class="cover-dot"></span><span>Heftet tar for seg hvordan bokstavene og tallene skrives.</span></li>
+                <li><span class="cover-dot"></span><span>Det er lagt inn enkle øveoppgaver.</span></li>
+              </ul>
+            </div>
+
+            <div class="cover-image-wrap">
+              <div class="cover-image-frame">
+                <img src="bilder/forside_arbeidshefte.png" alt="Forsideillustrasjon" class="cover-image" />
+              </div>
+            </div>
+
+            <div class="cover-bottom-area">
+              <div class="cover-school-footer">
+                <div class="school-line"></div>
+                <span class="school-name">HÅNES SKOLEENHET</span>
+                <div class="school-line"></div>
+              </div>
+            </div>
+
+            <div class="cover-bottom-blobs">
+              <div class="cover-blob-bot-1"></div>
+              <div class="cover-blob-bot-2"></div>
+            </div>
           </div>
         `
       });
     }
 
-    // 4. ARBEIDSARK (STARTER PÅ SIDE 4 = VENSTRE SIDE)
+// 4. ARBEIDSARK (STARTER PÅ SIDE 4 = VENSTRE SIDE)
     pagesToRender.push(...taskPages);
 
     pagesToRender.forEach((pageData, idx) => {
@@ -1208,6 +1286,9 @@ const endPage = currentPageNum - 1;
       });
       sheetsContainerEl.appendChild(pageEl);
     });
+
+    updatePageScale();
+    initScrollSync();
   }
 
 
@@ -1415,8 +1496,174 @@ function setupPrintModals() {
     });
   }
 
-  // INIT
+let sheetScrollObserver = null;
+let isManualSidebarClick = false;
+let manualClickTimer = null;
+
+function initScrollSync() {
+  if (sheetScrollObserver) {
+    sheetScrollObserver.disconnect();
+  }
+
+  const sheets = document.querySelectorAll("#sheets-container .a4-sheet");
+  if (!sheets.length) return;
+
+  // Lagre hvor synlig hvert enkelt A4-ark er på skjermen akkurat nå
+  const visibilityMap = new Map();
+
+  sheetScrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      visibilityMap.set(entry.target.id, entry.intersectionRatio);
+    });
+
+    // Ikke overstyr hvis brukeren nettopp klikket på et kort i venstremenyen
+    if (isManualSidebarClick) return;
+
+    // Finn det arket som dekker størst andel av skjermen
+    let bestId = null;
+    let maxRatio = 0;
+
+    visibilityMap.forEach((ratio, id) => {
+      if (ratio > maxRatio) {
+        maxRatio = ratio;
+        bestId = id;
+      }
+    });
+
+    if (!bestId || maxRatio < 0.15) return;
+
+    // Finn tilhørende arknummer (0 for forside/innhold, 1-24 for arbeidsark)
+    let sheetNum = 0;
+    if (bestId.startsWith("sheet-page-")) {
+      const parts = bestId.split("-");
+      const parsed = parseInt(parts[2], 10);
+      if (!isNaN(parsed)) {
+        sheetNum = parsed;
+      }
+    }
+
+    setActiveSidebarCard(sheetNum);
+  }, {
+    threshold: [0, 0.15, 0.3, 0.5, 0.75, 1.0]
+  });
+
+  sheets.forEach((sheet) => sheetScrollObserver.observe(sheet));
+}
+
+function setActiveSidebarCard(sheetNum) {
+  if (activeSheet === sheetNum) return;
+  activeSheet = sheetNum;
+  renderSidebarCards();
+
+  const targetCard = document.querySelector(`.sheet-card[data-sheet="${sheetNum}"]`);
+  if (targetCard) {
+    targetCard.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+  }
+}
+
+
+let customZoom = null;
+
+function updatePageScale() {
+  const container = document.getElementById("sheets-container");
+  const pages = Array.from(document.querySelectorAll("#sheets-container .a4-sheet"));
+
+  if (!container || pages.length === 0) return;
+
+  // Finn tilgjengelig høyde og bredde i visningsområdet på høyre side
+  const scrollWrapper = container.parentElement || container;
+  const firstPage = pages[0];
+
+  const pageW = firstPage.offsetWidth;
+  const pageH = firstPage.offsetHeight;
+
+  if (!pageW || !pageH) return;
+
+  // Trekk fra litt luft rundt arket (inkl. plass til zoom-knappen på høyre side)
+  const containerW = scrollWrapper.clientWidth - 96;
+  const containerH = window.innerHeight - 36;
+
+  let scale;
+  if (customZoom !== null) {
+    scale = customZoom;
+  } else {
+    const scaleW = containerW / pageW;
+    const scaleH = containerH / pageH;
+    scale = Math.min(scaleW, scaleH, 1.15);
+  }
+
+  // Sikre at skala ikke blir urimelig liten på veldig smale vinduer
+  scale = Math.max(scale, 0.25);
+
+  pages.forEach((page, index) => {
+    page.style.transform = `scale(${scale})`;
+    page.style.transformOrigin = "top center";
+
+    const nextPage = pages[index + 1];
+
+    // Sjekk om neste side tilhører et annet arbeidsark for å gi litt ekstra luft mellom arkene
+    const getSheetKey = (el) => {
+      if (!el) return "";
+      if (el.id === "sheet-page-cover" || el.id === "sheet-page-toc" || el.id === "sheet-page-cover-back") return "ark-0";
+      const parts = el.id.split("-");
+      return parts.length >= 3 ? `ark-${parts[2]}` : el.id;
+    };
+
+    const isLastPageOfSheet = !nextPage || getSheetKey(nextPage) !== getSheetKey(page);
+    const spacing = isLastPageOfSheet ? 32 : 14;
+
+    // Kompenser for tomrommet som oppstår under skalerte elementer i CSS
+    page.style.marginBottom = `${(scale - 1) * pageH + spacing}px`;
+  });
+
+  const zoomText = document.getElementById("zoomValText");
+  if (zoomText) {
+    const pct = Math.round(scale * 100);
+    zoomText.textContent = customZoom !== null ? `${pct}%` : `Auto\n(${pct}%)`;
+  }
+}
+
+function changeZoom(delta) {
+  const page = document.querySelector("#sheets-container .a4-sheet");
+  if (!page) return;
+
+  const currentMatrix = window.getComputedStyle(page).transform;
+  let currentScale = 1;
+
+  if (currentMatrix && currentMatrix !== "none") {
+    const values = currentMatrix.split("(")[1].split(")")[0].split(",");
+    currentScale = parseFloat(values[0]) || 1;
+  }
+
+  const base = customZoom !== null ? customZoom : currentScale;
+  customZoom = Math.min(Math.max(Math.round((base + delta) * 100) / 100, 0.3), 2.0);
+  updatePageScale();
+}
+
+function resetZoom() {
+  customZoom = null;
+  updatePageScale();
+}
+
+function initZoomControls() {
+  const btnIn = document.getElementById("btn-zoom-in");
+  const btnOut = document.getElementById("btn-zoom-out");
+  const btnReset = document.getElementById("zoomValText");
+
+  if (btnIn) btnIn.addEventListener("click", () => changeZoom(0.05));
+  if (btnOut) btnOut.addEventListener("click", () => changeZoom(-0.05));
+  if (btnReset) btnReset.addEventListener("click", resetZoom);
+
+  window.addEventListener("resize", updatePageScale);
+}
+
+
+// INIT
   initAuthWatermark();
+  initZoomControls();
   renderSidebarCards();
   renderSheets();
 })();
