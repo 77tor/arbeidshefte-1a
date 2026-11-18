@@ -12,16 +12,19 @@ body { background: var(--bg-canvas); color: var(--text-dark); }
 /* ==========================================================================
    2. VENSTREMENY (SIDEBAR & ARK-KORT)
    ========================================================================== */
-.sidebar { width: 450px; min-width: 450px; flex: 0 0 450px; background: var(--sidebar-bg); border-right: 1px solid #cbd5e1; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; z-index: 30; }
-.sidebar-top { padding: 16px 16px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--sidebar-bg); }
+.sidebar { width: 450px; min-width: 450px; flex: 0 0 450px; background: var(--sidebar-bg); border-right: 1px solid #cbd5e1; padding-right: 16px; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; z-index: 30; }
+
+.sidebar-top { padding: 13px 0 18px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--sidebar-bg); }
 .brand-group { display: flex; align-items: center; gap: 10px; }
-.brand-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--blue-main); color: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.sidebar-top h1 { font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--text-dark); line-height: 1.2; }
-.sidebar-top .subtitle { margin: 2px 0 0; font-size: 0.78rem; color: var(--text-muted); }
-.btn-login-pill { display: inline-flex; align-items: center; gap: 5px; background: var(--amber-bg); border: 1px solid #fcd34d; color: var(--amber-text); font-size: 0.78rem; font-weight: 700; padding: 5px 11px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
-.btn-login-pill.logged-in { background: #dcfce7; border-color: #86efac; color: #166534; }
-.sidebar-section-label { padding: 4px 16px 8px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; color: #475569; text-transform: uppercase; }
-.sheet-cards-list { flex: 1; overflow-y: auto; padding: 2px 14px 14px; display: flex; flex-direction: column; gap: 10px; }
+.brand-icon { width: 46px; height: 46px; border-radius: 50%; background: var(--blue-main); color: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.15s ease, filter 0.15s ease; }
+.brand-icon:hover { transform: scale(1.06); filter: brightness(1.05); }
+.brand-icon img { width: 100%; height: 100%; object-fit: contain; }
+.sidebar-top h1 { font-size: 1.08rem; font-weight: 700; margin: 0; color: var(--text-dark); line-height: 1.2; white-space: nowrap; }
+.sidebar-top .subtitle { margin: 3px 0 0; font-size: 0.82rem; color: var(--text-muted); white-space: nowrap; }
+.btn-login-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--amber-bg); border: 1px solid #fcd34d; color: var(--amber-text); font-size: 0.78rem; font-weight: 700; padding: 6px 12px; border-radius: 9999px; cursor: pointer; white-space: nowrap; }
+.btn-login-pill.logged-in { background: #ecfdf5; border-color: #a7f3d0; color: #166534; }
+.sidebar-section-label { padding: 4px 16px 10px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; color: #475569; text-transform: uppercase; }
+.sheet-cards-list { flex: 1; overflow-y: auto; padding: 2px 6px 14px 14px; display: flex; flex-direction: column; gap: 10px; }
 .sheet-card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 11px; padding: 11px 12px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s; }
 .sheet-card:hover { border-color: #93c5fd; }
 .sheet-card.active { border-color: var(--blue-main); box-shadow: 0 0 0 2px rgba(2, 119, 189, 0.14); }
@@ -55,6 +58,7 @@ body { background: var(--bg-canvas); color: var(--text-dark); }
 .mini-chip { font-size: 0.7rem; font-weight: 600; padding: 3px 7px; border-radius: 5px; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; }
 .mini-chip.on { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
 .sidebar-bottom { padding: 12px 14px 14px; background: var(--sidebar-bg); border-top: 1px solid #cbd5e1; display: flex; flex-direction: column; gap: 10px; }
+
 .bottom-tools-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .btn-outline-tool { display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 11px; font-size: 0.8rem; font-weight: 600; color: var(--text-dark); cursor: pointer; }
 .btn-outline-tool:hover { background: #f8fafc; border-color: #94a3b8; }
@@ -147,7 +151,7 @@ body.show-watermark #sheet-page-cover-back::after {
 /* ==========================================================================
    3. A4-ARK, TOPPTEKST & BUNNTEKST
    ========================================================================== */
-.preview-area { flex: 1; padding: 34px 24px; background: var(--bg-canvas); display: flex; flex-direction: column; align-items: center; gap: 36px; overflow-y: auto; }
+.preview-area { flex: 1; padding: 32px 24px; background: var(--bg-canvas); display: flex; flex-direction: column; align-items: center; gap: 36px; overflow-y: auto; }
 .a4-sheet { width: 210mm; height: 297mm; min-height: 297mm; max-height: 297mm; background: #ffffff; padding: 10mm 14mm 7mm; border: 1px solid #94a3b8; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; scroll-margin-top: 24px; }
 .sheet-inner-top { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
 .sheet-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #1e293b; padding-bottom: 6px; margin-bottom: 10px; }
@@ -166,7 +170,7 @@ body.show-watermark #sheet-page-cover-back::after {
    4. ARK 0: FORSIDE, INNHOLDSFORTEGNELSE & MELLOMSIDE
    ========================================================================== */
 #sheet-page-cover .sheet-header, #sheet-page-cover .sheet-footer, #sheet-page-cover-back .sheet-header, #sheet-page-cover-back .sheet-footer { display: none; }
-#sheet-page-cover .hefte-cover { min-height: 266mm; margin-top: 6mm; margin-bottom: 6mm; }
+#sheet-page-cover .hefte-cover { min-height: 266mm; margin-top: 4mm; margin-bottom: 4mm; }
 .hefte-cover { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; min-height: 266mm; background: #ffffff; border: 3px solid #059669; border-radius: 16px; overflow: hidden; box-sizing: border-box; }
 .cover-inner-border { position: absolute; inset: 4px; border: 1px solid #e2e8f0; border-radius: 12px; pointer-events: none; z-index: 20; }
 .cover-top-blobs { position: absolute; top: 0; left: 0; right: 0; height: 13mm; overflow: hidden; pointer-events: none; }

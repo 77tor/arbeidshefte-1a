@@ -1660,6 +1660,23 @@ function initZoomControls() {
   window.addEventListener("resize", updatePageScale);
 }
 
+function openAppSwitchModal() {
+  const modal = document.getElementById('appSwitchModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeAppSwitchModal() {
+  const modal = document.getElementById('appSwitchModal');
+  if (modal) modal.style.display = 'none';
+}
+
+// Lukk modalen hvis brukeren trykker på Escape-tasten
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeAppSwitchModal();
+  }
+});
+
 
 // INIT
   initAuthWatermark();

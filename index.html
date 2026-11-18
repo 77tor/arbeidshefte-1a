@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arbeidshefte 1. Klasse – Hånes skole</title>
+  <title>Arbeidshefte 1. Klasse</title>
     <link rel="icon" type="image/png" href="logo.svg">
     <link rel="apple-touch-icon" href="logo.svg">
   <link rel="stylesheet" href="styles.css" />
@@ -15,8 +15,8 @@
 <!-- Topp: Ikon, Tittel & Logg inn -->
       <div class="sidebar-top">
         <div class="brand-group">
-          <div class="brand-icon" style="background: transparent;" aria-hidden="true">
-            <img src="logo.svg" alt="" width="38" height="38">
+            <div class="brand-icon" onclick="openAppSwitchModal()" title="Bytt hefte / verktøy" style="background: transparent; cursor: pointer;">
+            <img src="logo.svg" alt="Bytt til Lesehefte" width="38" height="38">
           </div>
           <div>
             <h1>Arbeidshefte 1. Klasse</h1>
@@ -370,6 +370,44 @@
   <button type="button" id="btn-zoom-out" title="Zoom ut" aria-label="Zoom ut">&minus;</button>
 </div>
 
+<!-- Modal for å bytte mellom Arbeidshefte og Lesehefte -->
+<div id="appSwitchModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); z-index: 9999; align-items: center; justify-content: center; padding: 16px;" onclick="if(event.target === this) closeAppSwitchModal()">
+  <div class="auth-modal-box" style="max-width: 390px;">
+    <div class="auth-modal-header" style="background: #0277bd;">
+      <div class="auth-modal-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+      </div>
+      <div>
+        <h3>Bytt verktøy</h3>
+        <p>1. trinn – Utskriftsklare hefter</p>
+      </div>
+    </div>
+
+    <div class="auth-modal-form" style="gap: 12px;">
+      <p style="margin: 0; font-size: 0.9rem; color: #334155; line-height: 1.45;">
+        Vil du gå til nettsiden for <strong>Lesehefte for 1. trinn</strong>?
+      </p>
+
+      <a href="https://77tor.github.io/leseark/" class="auth-btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; text-align: center;">
+        <span>Gå til Lesehefte for 1. trinn</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
+
+      <button type="button" class="auth-btn-secondary" onclick="closeAppSwitchModal()">
+        Bli i Arbeidshefte
+      </button>
+    </div>
+  </div>
+</div>
+
+
   <!-- Oppgavebank-register -->
   <script>
     window.NORSK_DATA = {};
@@ -409,5 +447,23 @@
 
   <!-- Hovedlogikk -->
   <script src="app.js"></script>
+
+<script>
+  window.openAppSwitchModal = function() {
+    const modal = document.getElementById('appSwitchModal');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.closeAppSwitchModal = function() {
+    const modal = document.getElementById('appSwitchModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      window.closeAppSwitchModal();
+    }
+  });
+</script>
 </body>
 </html>
