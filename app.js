@@ -248,11 +248,11 @@ setupPrintModals();
       (isCoverSelected ? " active" : "") +
       (!cfg0.visible ? " is-hidden-sheet" : "");
 
-    coverCard.innerHTML = `
+coverCard.innerHTML = `
       <div class="card-top-row" style="margin-bottom: ${isCoverSelected && cfg0.visible ? "8px" : "0"};">
         <div class="card-title-left">
           ${ICON_DOC}
-          <span>Ark 0 – Forside</span>
+          <span>Forside &amp; Innholdsfortegnelse</span>
         </div>
         <div class="card-meta-right">
           <span class="week-badge">Hefte</span>

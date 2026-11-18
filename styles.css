@@ -166,8 +166,8 @@ body.show-watermark #sheet-page-cover-back::after {
    4. ARK 0: FORSIDE, INNHOLDSFORTEGNELSE & MELLOMSIDE
    ========================================================================== */
 #sheet-page-cover .sheet-header, #sheet-page-cover .sheet-footer, #sheet-page-cover-back .sheet-header, #sheet-page-cover-back .sheet-footer { display: none; }
-#sheet-page-cover .hefte-cover { min-height: 278mm; }
-.hefte-cover { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; min-height: 278mm; background: #ffffff; border: 3px solid #059669; border-radius: 16px; overflow: hidden; box-sizing: border-box; }
+#sheet-page-cover .hefte-cover { min-height: 266mm; margin-top: 6mm; margin-bottom: 6mm; }
+.hefte-cover { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; min-height: 266mm; background: #ffffff; border: 3px solid #059669; border-radius: 16px; overflow: hidden; box-sizing: border-box; }
 .cover-inner-border { position: absolute; inset: 4px; border: 1px solid #e2e8f0; border-radius: 12px; pointer-events: none; z-index: 20; }
 .cover-top-blobs { position: absolute; top: 0; left: 0; right: 0; height: 13mm; overflow: hidden; pointer-events: none; }
 .cover-blob-top-1 { position: absolute; top: -10mm; left: 25%; width: 66%; height: 20mm; background: #dcfce7; border-radius: 9999px; }
@@ -184,9 +184,10 @@ body.show-watermark #sheet-page-cover-back::after {
 .cover-bullets li { display: flex; align-items: flex-start; gap: 3mm; line-height: 1.45; }
 .cover-dot { display: inline-block; width: 3mm; height: 3mm; border-radius: 9999px; background: #15803d; margin-top: 2.2mm; flex-shrink: 0; }
 .cover-image-wrap { position: relative; z-index: 10; width: 86%; max-width: 150mm; margin-top: 7mm; margin-bottom: 4mm; }
-.cover-image-frame { background: #ffffff; border: 3px solid #22c55e; border-radius: 26px; padding: 5mm; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+.cover-image-frame { background: #f0fdf4; border: 3px solid #22c55e; border-radius: 26px; padding: 5mm; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
 .cover-image { width: 100%; max-height: 82mm; object-fit: contain; border-radius: 12px; display: block; margin: 0; }
-.cover-bottom-area { position: relative; z-index: 10; margin-top: 0; margin-bottom: 9mm; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4.5mm; }.cover-name-box { display: flex; align-items: flex-end; gap: 4mm; width: 86%; max-width: 150mm; margin: auto 0; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 5mm 7mm; font-size: 14pt; color: #14532d; }.cover-name-box { display: flex; align-items: flex-end; gap: 4mm; width: 86%; max-width: 150mm; margin-top: 6mm; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 5mm 7mm; font-size: 14pt; color: #14532d; }
+.cover-name-box { display: flex; align-items: flex-end; gap: 4mm; width: 60%; max-width: 110mm; margin-top: auto; margin-bottom: 20mm; background: transparent; border: 1.5px solid #86efac; border-radius: 12px; padding: 9mm 7mm 5mm; font-size: 14pt; color: #14532d; }
+.cover-bottom-area { position: relative; z-index: 10; margin-top: 0; margin-bottom: 9mm; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4.5mm; }
 .cover-line { flex: 1; border-bottom: 2px solid #22c55e; height: 6mm; min-width: 18mm; }
 .cover-line:first-of-type { flex: 2.2; }
 .cover-school-footer { display: flex; align-items: center; justify-content: center; gap: 4mm; width: 100%; padding: 0 8mm; }
