@@ -179,14 +179,14 @@ body.show-watermark #sheet-page-cover-back::after {
 .cover-title { font-size: 36pt; font-weight: 700; color: #052e16; line-height: 1.15; margin: 4mm 0 0; }
 .cover-divider { width: 75%; height: 6px; margin: 3mm auto 0; border-radius: 9999px; background: #4ade80; }
 .cover-subtitle { font-size: 16pt; color: #64748b; font-weight: 500; margin: 4mm 0 0; }
-.cover-info-box { position: relative; z-index: 10; width: 86%; max-width: 150mm; background: #f0fdf4; border: 2px solid #4ade80; border-radius: 16px; padding: 6mm 7mm; margin-top: 8mm; text-align: left; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.cover-info-box { position: relative; z-index: 10; width: 65%; max-width: 117mm; background: #f0fdf4; border: 2px solid #4ade80; border-radius: 16px; padding: 6mm 7mm; margin-top: 8mm; text-align: left; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 .cover-bullets { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4mm; color: #1e293b; font-size: 13.5pt; font-weight: 500; }
 .cover-bullets li { display: flex; align-items: flex-start; gap: 3mm; line-height: 1.45; }
 .cover-dot { display: inline-block; width: 3mm; height: 3mm; border-radius: 9999px; background: #15803d; margin-top: 2.2mm; flex-shrink: 0; }
 .cover-image-wrap { position: relative; z-index: 10; width: 86%; max-width: 150mm; margin-top: 7mm; margin-bottom: 4mm; }
 .cover-image-frame { background: #f0fdf4; border: 3px solid #22c55e; border-radius: 26px; padding: 5mm; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
 .cover-image { width: 100%; max-height: 82mm; object-fit: contain; border-radius: 12px; display: block; margin: 0; }
-.cover-name-box { display: flex; align-items: flex-end; gap: 4mm; width: 60%; max-width: 110mm; margin-top: auto; margin-bottom: 20mm; background: transparent; border: 1.5px solid #86efac; border-radius: 12px; padding: 9mm 7mm 5mm; font-size: 14pt; color: #14532d; }
+.cover-name-box { display: flex; align-items: flex-end; gap: 4mm; width: 65%; max-width: 117mm; margin-top: auto; margin-bottom: 20mm; background: transparent; border: 1.5px solid #86efac; border-radius: 12px; padding: 9mm 7mm 5mm; font-size: 14pt; color: #14532d; }
 .cover-bottom-area { position: relative; z-index: 10; margin-top: 0; margin-bottom: 9mm; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4.5mm; }
 .cover-line { flex: 1; border-bottom: 2px solid #22c55e; height: 6mm; min-width: 18mm; }
 .cover-line:first-of-type { flex: 2.2; }
