@@ -1147,7 +1147,7 @@ const endPage = currentPageNum - 1;
             </div>
 
             <div class="cover-header-block">
-              <h1 class="cover-title">Arbeidshefte for 1. trinn</h1>
+              <h1 class="cover-title">Arbeidshefte for 1. klasse</h1>
               <div class="cover-divider"></div>
               <p class="cover-subtitle">Bokstaver &amp; Tall</p>
             </div>
