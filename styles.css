@@ -196,7 +196,7 @@ body.show-watermark #sheet-page-cover-back::after {
 .cover-line:first-of-type { flex: 2.2; }
 .cover-school-footer { display: flex; align-items: center; justify-content: center; gap: 4mm; width: 100%; padding: 0 8mm; }
 .cover-school-footer .school-line { height: 2px; flex: 1; max-width: 22mm; background: #16a34a; }
-.cover-school-footer .school-name { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; color: #14532d; font-weight: 700; font-size: 10pt; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+.cover-school-footer .school-name { font-family: "Tor-trykkskrift", system-ui, -apple-system, sans-serif; color: #14532d; font-weight: 700; font-size: 10pt; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
 
 /* Innholdsfortegnelse (Side 2) */
 .a4-sheet.toc-sheet .sheet-inner-top { padding-top: 28px; padding-left: 24px; padding-right: 24px; }
